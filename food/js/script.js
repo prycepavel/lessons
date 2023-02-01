@@ -114,5 +114,63 @@ window.addEventListener('DOMContentLoaded', () => {
 
   setClock('.timer', deadline);
 
+  // Modal
+
+  // Способ для вывода модального окна, с использованием двух разных кнопок вызова расположенных на странице
+  const modalTrigger = document.querySelectorAll('[data-modal]'),  // Кнопка вызывающая модальное окно
+    modal = document.querySelector('.modal'),  // Модальное окно
+    modalCloseBtn = document.querySelector('[data-close]');  // Закрытие модального окна
+  
+  // Открытие модального окна по клику на кнопку
+  modalTrigger.forEach(btn => {
+    btn.addEventListener('click', () => {
+      modal.classList.add('show');
+      modal.classList.remove('hide');
+      // modal.classList.toggle('show'); // Если у элемента есть класс show, он будет удален (альтернатива двум написанным строчкам выше)
+      document.body.style.overflow = 'hidden';  // При открытие модального окна, фиксирует страницу, запрешает её скроллить путем добавления стилей для элемента body
+    });
+  });
+
+  // Функция закрытия модального окна
+  function closeModal() {
+    modal.classList.add('hide');
+    modal.classList.remove('show');
+    // modal.classList.toggle('show'); // Если у элемента нет класса show, он будет добавлен (альтернатива двум написанным строчкам выше)
+    document.body.style.overflow = '';  // При закрытие модального окна, удаляет стили в body запрещающие скролл
+  }
+
+  // Закрытие модального окна по клику на крестик или кнопку закрытия
+  modalCloseBtn.addEventListener('click', closeModal);
+
+  // Закрытие модального окна кликнув по затемненному фону вокруг модального окна
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) { // Если место куда кликнул пользователь event.target будет строго совпадать с модальным окном modal
+      closeModal();
+    }
+  });
+
+  // Закрытие модального окна нажатием на кнопку клавиатуры Esc
+  document.addEventListener('keydown', (event) => {
+    if (event.code === 'Escape' && modal.classList.contains('show')) { // Проверяем что нажатая кнопка точно Esc, и открыто модальное окно
+      closeModal();
+    }
+  });
+
+
+  // Способ для вывода модального окна, с использованием только одной кнопки вызова расположенной на странице
+  // const modalTrigger = document.querySelector('[data-modal]'),  // Кнопка вызывающая модальное окно
+  //   modal = document.querySelector('.modal'),  // Модальное окно
+  //   modalCloseBtn = document.querySelector('[data-close]');  // Закрытие модального окна
+  
+  // // Функция отвечающая за открытие модального окна по клику на кнопку
+  // modalTrigger.addEventListener('click', () => {
+  //   modal.classList.add('show');
+  //   modal.classList.remove('hide');
+  //   // modal.classList.toggle('show'); // Если у элемента есть класс show, он будет удален
+  //   document.body.style.overflow = 'hidden';  // При открытие модального окна, фиксирует страницу, запрешает её скроллить путем добавления стилей для элемента body
+  // });
+
+  // Здесь нужно подставить весь написанный выше код, который отвечает за закрытие модального окна
+  
 });
 
