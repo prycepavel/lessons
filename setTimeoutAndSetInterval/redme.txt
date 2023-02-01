@@ -1,0 +1,1 @@
+Скрипты и время их выполнения. setTimeout и setInterval(65)
