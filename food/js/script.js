@@ -121,15 +121,27 @@ window.addEventListener('DOMContentLoaded', () => {
     modal = document.querySelector('.modal'),  // Модальное окно
     modalCloseBtn = document.querySelector('[data-close]');  // Закрытие модального окна
   
+  // Функция открытия модального окна
+  function openModal() {
+    modal.classList.add('show');
+    modal.classList.remove('hide');
+    // modal.classList.toggle('show'); // Если у элемента есть класс show, он будет удален (альтернатива двум написанным строчкам выше)
+    document.body.style.overflow = 'hidden';  // При открытие модального окна, фиксирует страницу, запрешает её скроллить путем добавления стилей для элемента body
+    clearInterval(modalTimerId);  // Если пользователь сам открыл модальное окно, открытие окна по таймеру не сработает
+  }
+  
   // Открытие модального окна по клику на кнопку
   modalTrigger.forEach(btn => {
-    btn.addEventListener('click', () => {
-      modal.classList.add('show');
-      modal.classList.remove('hide');
-      // modal.classList.toggle('show'); // Если у элемента есть класс show, он будет удален (альтернатива двум написанным строчкам выше)
-      document.body.style.overflow = 'hidden';  // При открытие модального окна, фиксирует страницу, запрешает её скроллить путем добавления стилей для элемента body
-    });
+    btn.addEventListener('click', openModal);
   });
+
+  // // Способ для вывода модального окна, с использованием только одной кнопки вызова расположенной на странице.
+  // modalTrigger.addEventListener('click', () => {
+  //   modal.classList.add('show');
+  //   modal.classList.remove('hide');
+  //   // modal.classList.toggle('show');
+  //   document.body.style.overflow = 'hidden';
+  // });
 
   // Функция закрытия модального окна
   function closeModal() {
@@ -156,21 +168,18 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Открытие модального окна по таймеру
+  const modalTimerId = setTimeout(openModal, 6000);
 
-  // Способ для вывода модального окна, с использованием только одной кнопки вызова расположенной на странице
-  // const modalTrigger = document.querySelector('[data-modal]'),  // Кнопка вызывающая модальное окно
-  //   modal = document.querySelector('.modal'),  // Модальное окно
-  //   modalCloseBtn = document.querySelector('[data-close]');  // Закрытие модального окна
-  
-  // // Функция отвечающая за открытие модального окна по клику на кнопку
-  // modalTrigger.addEventListener('click', () => {
-  //   modal.classList.add('show');
-  //   modal.classList.remove('hide');
-  //   // modal.classList.toggle('show'); // Если у элемента есть класс show, он будет удален
-  //   document.body.style.overflow = 'hidden';  // При открытие модального окна, фиксирует страницу, запрешает её скроллить путем добавления стилей для элемента body
-  // });
+  function showModalByScroll() {
+    if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight -1) { // Проверяет долистал ли пользователь до конца.
+      openModal();
+      window.removeEventListener('scroll', showModalByScroll);
+    }
+  }
 
-  // Здесь нужно подставить весь написанный выше код, который отвечает за закрытие модального окна
-  
+  // Показывать модальное окно если пользователь долистал страницу до конца
+  window.addEventListener('scroll', showModalByScroll);
+
 });
 
