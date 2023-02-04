@@ -169,7 +169,7 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   // Открытие модального окна по таймеру
-  const modalTimerId = setTimeout(openModal, 6000);
+  // const modalTimerId = setTimeout(openModal, 6000);
 
   function showModalByScroll() {
     if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight -1) { // Проверяет долистал ли пользователь до конца.
@@ -180,6 +180,73 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // Показывать модальное окно если пользователь долистал страницу до конца
   window.addEventListener('scroll', showModalByScroll);
+
+  // Class
+
+  // Создание класса для карточек
+  class MenuCard {
+    constructor(src, alt, title, descr, price, parentSelector) { // Аргументы
+      this.src = src;  // Свойства создоваемого объекта
+      this.alt = alt;
+      this.title = title;
+      this.descr = descr;
+      this.price = price; // 9 долларов
+      this.parent = document.querySelector(parentSelector); // Внутри аргумента parentSelector находится div с классом .container
+      this.transfer = 70; // Курс доллара
+      this.changeToRUB(); // Запуск метода конвертации, записывает результат конвертации долларов в рубли в свойство this.price, перезаписывая его первоначальное значение 9 долларов.
+    }
+
+    // Метод конвертации из доллара в рубли
+    changeToRUB() {
+      this.price = this.price * this.transfer;
+    }
+
+    // Метод формирования верстки
+    render() {
+      const element = document.createElement('div'); // Код HTML будет помещен в созданный div который присвоен переменной element.
+      element.innerHTML = `
+      <div class="menu__item">
+        <img src=${this.src} alt=${this.alt}>
+        <h3 class="menu__item-subtitle">${this.title}</h3>
+        <div class="menu__item-descr">${this.descr}</div>
+        <div class="menu__item-divider"></div>
+        <div class="menu__item-price">
+          <div class="menu__item-cost">Цена:</div>
+          <div class="menu__item-total"><span>${this.price}</span> руб/день</div>
+        </div>
+      </div>
+      `;
+
+      this.parent.append(element); // Добавляем созданный элемент (element) во внутрь элемента parent в самый конец.
+    }
+  }
+
+  new MenuCard( // Создаем новый объект MenuCard с аргументами и запуском метода render
+    "food/img/tabs/vegy.jpg", // src
+    "vegy", // alt
+    "Меню 'Фитнес'", // title
+    "Меню 'Фитнес' - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!", // descr
+    9, // price 9 долларов
+    ".menu .container" // parentSelector
+  ).render();
+
+  new MenuCard( // Создаем новый объект MenuCard с аргументами и запуском метода render
+    "food/img/tabs/elite.jpg", // src
+    "elite", // alt
+    "Меню 'Премиум'", // title
+    "В меню 'Премиум' мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!", // descr
+    14, // price 9 долларов
+    ".menu .container" // parentSelector
+  ).render();
+
+  new MenuCard( // Создаем новый объект MenuCard с аргументами и запуском метода render
+    "food/img/tabs/post.jpg", // src
+    "post", // alt
+    "Меню 'Постное'", // title
+    "Меню 'Постное' - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.", // descr
+    21, // price 9 долларов
+    ".menu .container" // parentSelector
+  ).render();
 
 });
 
