@@ -185,12 +185,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // Создание класса для карточек
   class MenuCard {
-    constructor(src, alt, title, descr, price, parentSelector) { // Аргументы
+    constructor(src, alt, title, descr, price, parentSelector, ...classes) { // Аргументы
       this.src = src;  // Свойства создоваемого объекта
       this.alt = alt;
       this.title = title;
       this.descr = descr;
       this.price = price; // 9 долларов
+      this.classes = classes; // Внутри будет массив с названиями классов menu__item, и другие если они будут в массиве. 
       this.parent = document.querySelector(parentSelector); // Внутри аргумента parentSelector находится div с классом .container
       this.transfer = 70; // Курс доллара
       this.changeToRUB(); // Запуск метода конвертации, записывает результат конвертации долларов в рубли в свойство this.price, перезаписывая его первоначальное значение 9 долларов.
@@ -203,17 +204,24 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Метод формирования верстки
     render() {
-      const element = document.createElement('div'); // Код HTML будет помещен в созданный div который присвоен переменной element.
+      const element = document.createElement('div'); // Код innerHTML будет помещен в созданный div который присвоен переменной element, и которому будет задан класс menu__item.
+      
+      // Если в ...classes нечего не передается, в таком случае элементу(массиву) присваивается класс menu__item
+      if (this.classes.length === 0) { // Если длина массива равна 0, будет присвоен дефолтный класс
+        this.element = 'menu__item';
+        element.classList.add(this.element);
+      } else {
+        this.classes.forEach(className => element.classList.add(className)); // Во время перебора добавляем класс menu__item который расположен внутри массива classes, элементу element(div).
+      }
+      
       element.innerHTML = `
-      <div class="menu__item">
-        <img src=${this.src} alt=${this.alt}>
-        <h3 class="menu__item-subtitle">${this.title}</h3>
-        <div class="menu__item-descr">${this.descr}</div>
-        <div class="menu__item-divider"></div>
-        <div class="menu__item-price">
-          <div class="menu__item-cost">Цена:</div>
-          <div class="menu__item-total"><span>${this.price}</span> руб/день</div>
-        </div>
+      <img src=${this.src} alt=${this.alt}>
+      <h3 class="menu__item-subtitle">${this.title}</h3>
+      <div class="menu__item-descr">${this.descr}</div>
+      <div class="menu__item-divider"></div>
+      <div class="menu__item-price">
+        <div class="menu__item-cost">Цена:</div>
+        <div class="menu__item-total"><span>${this.price}</span> руб/день</div>
       </div>
       `;
 
@@ -227,7 +235,9 @@ window.addEventListener('DOMContentLoaded', () => {
     "Меню 'Фитнес'", // title
     "Меню 'Фитнес' - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!", // descr
     9, // price 9 долларов
-    ".menu .container" // parentSelector
+    ".menu .container", // parentSelector
+    "menu__item",
+    'big'
   ).render();
 
   new MenuCard( // Создаем новый объект MenuCard с аргументами и запуском метода render
@@ -236,7 +246,8 @@ window.addEventListener('DOMContentLoaded', () => {
     "Меню 'Премиум'", // title
     "В меню 'Премиум' мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!", // descr
     14, // price 9 долларов
-    ".menu .container" // parentSelector
+    ".menu .container", // parentSelector
+    "menu__item"
   ).render();
 
   new MenuCard( // Создаем новый объект MenuCard с аргументами и запуском метода render
@@ -245,7 +256,8 @@ window.addEventListener('DOMContentLoaded', () => {
     "Меню 'Постное'", // title
     "Меню 'Постное' - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.", // descr
     21, // price 9 долларов
-    ".menu .container" // parentSelector
+    ".menu .container", // parentSelector
+    "menu__item"
   ).render();
 
 });
